@@ -1,0 +1,64 @@
+name: Bench (Azure self-hosted)
+
+# Manually-triggered benchmark on a self-hosted Azure VM with AVX-512.
+# The VM is provisioned out-of-band via az cli; this workflow just feeds
+# work to whatever ephemeral runner happens to be registered with the
+# 'avx512-azure' label.
+on:
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: [self-hosted, linux, avx512-azure]
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+
+      - name: Show CPU info
+        run: |
+          echo "=== model ==="
+          grep -m1 'model name' /proc/cpuinfo
+          echo "=== AVX-512 family flags ==="
+          grep -oE 'avx512[a-z0-9_]*' /proc/cpuinfo | sort -u | paste -sd, -
+
+      - name: Run benchmarks
+        env:
+          DOTNET_TieredCompilation: '0'
+        run: |
+          dotnet run -c Release --project src/Palindrome.Benchmarks -- \
+            --filter '*PalindromeBenchmarks*' \
+            --job short \
+            --exporters json
+
+      - name: Locate result file
+        id: result
+        run: |
+          file=$(ls BenchmarkDotNet.Artifacts/results/*-report-full-compact.json | head -n1)
+          echo "path=$file" >> "$GITHUB_OUTPUT"
+
+      - name: Publish benchmark trend
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: 'benchmarkdotnet'
+          name: 'Palindrome (Azure Dsv5 Ice Lake)'
+          output-file-path: ${{ steps.result.outputs.path }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          alert-threshold: '120%'
+          comment-on-alert: true
+          fail-on-alert: false
+          summary-always: true
+
+      - name: Upload raw artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-azure-${{ github.run_id }}
+          path: BenchmarkDotNet.Artifacts/
+          retention-days: 30
