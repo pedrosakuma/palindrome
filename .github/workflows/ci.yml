@@ -78,7 +78,7 @@ jobs:
         if: env.skip != 'true'
         id: result
         run: |
-          file=$(ls BenchmarkDotNet.Artifacts/results/*-report-full-compact.json | head -n1)
+          file=$(ls BenchmarkDotNet.Artifacts/results/*-report-full-compressed.json | head -n1)
           echo "Result file: $file"
           echo "path=$file" >> "$GITHUB_OUTPUT"
 
