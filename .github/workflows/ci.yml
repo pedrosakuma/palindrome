@@ -58,7 +58,14 @@ jobs:
           echo "Model  : ${{ steps.cpu.outputs.model }}"
           echo "AVX-512: ${{ steps.cpu.outputs.avx512 }} (BW + VBMI required)"
 
+      - name: Skip bench when no AVX-512 hardware
+        if: steps.cpu.outputs.avx512 != 'true'
+        run: |
+          echo "::warning title=No AVX-512::Runner has no AVX-512 BW + VBMI. Skipping benchmark publish to keep the trend chart comparable across runs. Re-run via 'workflow_dispatch' to retry the runner lottery."
+          echo "skip=true" >> "$GITHUB_ENV"
+
       - name: Run benchmarks
+        if: env.skip != 'true'
         env:
           DOTNET_TieredCompilation: '0'
         run: |
@@ -68,6 +75,7 @@ jobs:
             --exporters json
 
       - name: Locate result file
+        if: env.skip != 'true'
         id: result
         run: |
           file=$(ls BenchmarkDotNet.Artifacts/results/*-report-full-compact.json | head -n1)
@@ -75,6 +83,7 @@ jobs:
           echo "path=$file" >> "$GITHUB_OUTPUT"
 
       - name: Publish benchmark trend
+        if: env.skip != 'true'
         uses: benchmark-action/github-action-benchmark@v1
         with:
           tool: 'benchmarkdotnet'
@@ -90,7 +99,7 @@ jobs:
           summary-always: true
 
       - name: Upload raw artifacts
-        if: always()
+        if: ${{ always() && env.skip != 'true' }}
         uses: actions/upload-artifact@v4
         with:
           name: bench-results-${{ github.run_id }}
