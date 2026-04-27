@@ -12,6 +12,10 @@ jobs:
     runs-on: [self-hosted, linux, avx512-azure]
     permissions:
       contents: write
+    env:
+      # Self-hosted runner has no write access to /usr/share/dotnet;
+      # install the SDK into the runner's HOME instead.
+      DOTNET_INSTALL_DIR: ${{ github.workspace }}/.dotnet
     steps:
       - uses: actions/checkout@v4
 
