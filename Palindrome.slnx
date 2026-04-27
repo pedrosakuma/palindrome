@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Palindrome.Benchmarks/Palindrome.Benchmarks.csproj" />
+    <Project Path="src/Palindrome.Core/Palindrome.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Palindrome.Tests/Palindrome.Tests.csproj" />
+  </Folder>
+</Solution>

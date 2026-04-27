@@ -1,0 +1,98 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+      - name: Restore
+        run: dotnet restore Palindrome.slnx
+      - name: Build
+        run: dotnet build Palindrome.slnx -c Release --no-restore
+      - name: Test
+        run: dotnet test tests/Palindrome.Tests/Palindrome.Tests.csproj -c Release --no-build --nologo
+
+  benchmark:
+    needs: test
+    runs-on: ubuntu-latest
+    # Bench can take ~5 min on short job; only run on main pushes and
+    # explicit dispatch to avoid burning CI minutes on every PR.
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          dotnet-quality: 'preview'
+
+      - name: Detect CPU features
+        id: cpu
+        run: |
+          echo "=== /proc/cpuinfo flags (first core) ==="
+          grep -m1 '^flags' /proc/cpuinfo | tr ' ' '\n' | sort -u | paste -sd, -
+          echo
+          echo "vendor=$(grep -m1 vendor_id /proc/cpuinfo | awk '{print $3}')" >> "$GITHUB_OUTPUT"
+          echo "model=$(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | xargs)" >> "$GITHUB_OUTPUT"
+          if grep -q '\bavx512f\b' /proc/cpuinfo && grep -q '\bavx512bw\b' /proc/cpuinfo && grep -q '\bavx512vbmi\b' /proc/cpuinfo; then
+            echo "avx512=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "avx512=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Show runner CPU
+        run: |
+          echo "Vendor : ${{ steps.cpu.outputs.vendor }}"
+          echo "Model  : ${{ steps.cpu.outputs.model }}"
+          echo "AVX-512: ${{ steps.cpu.outputs.avx512 }} (BW + VBMI required)"
+
+      - name: Run benchmarks
+        env:
+          DOTNET_TieredCompilation: '0'
+        run: |
+          dotnet run -c Release --project src/Palindrome.Benchmarks -- \
+            --filter '*PalindromeBenchmarks*' \
+            --job short \
+            --exporters json
+
+      - name: Locate result file
+        id: result
+        run: |
+          file=$(ls BenchmarkDotNet.Artifacts/results/*-report-full-compact.json | head -n1)
+          echo "Result file: $file"
+          echo "path=$file" >> "$GITHUB_OUTPUT"
+
+      - name: Publish benchmark trend
+        uses: benchmark-action/github-action-benchmark@v1
+        with:
+          tool: 'benchmarkdotnet'
+          output-file-path: ${{ steps.result.outputs.path }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          auto-push: true
+          # Comment on PRs/commits if a benchmark regresses by more than 50%.
+          # Threshold is loose because GitHub-hosted runners are noisy and
+          # can dispatch to different CPU families between runs.
+          alert-threshold: '150%'
+          comment-on-alert: true
+          fail-on-alert: false
+          summary-always: true
+
+      - name: Upload raw artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-results-${{ github.run_id }}
+          path: BenchmarkDotNet.Artifacts/
+          retention-days: 30
