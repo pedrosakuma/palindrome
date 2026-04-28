@@ -28,6 +28,7 @@ two-pointer with cross-lane permutes.
 | 9 | **`TwoPointerSimdChecker`** | SIMD two-pointer in **ushort** lanes; vectorized symbol skip + popcount-driven advance. |
 | 10 | **`TwoPointerSimdByteChecker`** | Same as #9 but **packs ushort→byte** for 2× lane density. |
 | 11 | **`TwoPointerSimdAvx512Checker`** | AVX-512 BW + VBMI version of #10: 64 chars/side/iter, single-instruction `vpermb` reverse. Falls back to #10 on unsupported hardware. |
+| 12 | `TwoPointerSimdAvx512x2Checker` | Double-pumped AVX-512 (128 chars/side/iter). **Documented negative result** — slower than #11 on Ice Lake-SP because L2 bandwidth, not chain latency, was the real bottleneck. Kept as a cautionary tale; see source. |
 
 ## Local benchmarks (AMD EPYC 7763 Zen 3, no AVX-512)
 
@@ -45,9 +46,53 @@ Headline numbers on a 256 KiB clean palindrome (no symbols), median of
 | **TwoPointerSimdByte**       | **280 µs** | **12.5×** |
 | **TwoPointerSimdAvx512**     | ≈ 280 µs (falls back to byte on Zen 3) |
 
-On a CPU with AVX-512BW + AVX-512VBMI, the AVX-512 variant is expected
-to land ~1.5-2× faster than the AVX2 byte version (estimate, not
-measured here — see the published [bench trend](https://pedrosakuma.github.io/palindrome/dev/bench/) for actual CI numbers).
+## Cross-architecture comparison (Zen 3 vs Ice Lake-SP)
+
+Same binary, BenchmarkDotNet `--job short`, 4 input sizes. "Local" is
+AMD EPYC 7763 (Zen 3, no AVX-512); "Azure" is Intel Xeon Platinum 8370C
+(Ice Lake-SP Standard_D2s_v5, AVX-512BW + VBMI present).
+
+| Length | Strategy                | Local (Zen 3) | Azure (Ice Lake-SP) | Δ Azure |
+|-------:|-------------------------|--------------:|--------------------:|--------:|
+|     64 | TwoPointerSimd          |       15.3 ns |             11.5 ns |   −25%  |
+|     64 | **TwoPointerSimdByte**  |    **8.5 ns** |          **5.7 ns** |   −33%  |
+|     64 | TwoPointerSimdAvx512    |   ↳ byte path |             63.1 ns |   slow  |
+|   1024 | TwoPointerSimd          |        994 ns |          **861 ns** |   −13%  |
+|   1024 | TwoPointerSimdByte      |       1083 ns |              973 ns |   −10%  |
+|   1024 | TwoPointerSimdAvx512    |   ↳ byte path |             1002 ns |   slow  |
+|  16384 | **TwoPointerSimd**      |   **14.6 µs** |             14.1 µs |   ≈     |
+|  16384 | TwoPointerSimdByte      |       15.6 µs |             15.1 µs |   ≈     |
+|  16384 | TwoPointerSimdAvx512    |   ↳ byte path |             15.8 µs |   ≈     |
+| 262144 | TwoPointerSimd          |        267 µs |          **235 µs** |   −12%  |
+| 262144 | **TwoPointerSimdByte**  |    **261 µs** |              243 µs |    −7%  |
+| 262144 | TwoPointerSimdAvx512    |   ↳ byte path |              256 µs |   slow  |
+|     64 | Naive (sanity baseline) |        776 ns |              763 ns |   ≈     |
+
+**Three things worth noting:**
+
+1. **Best strategy depends on the silicon.** On Zen 3, byte-narrowing
+   wins at every size — Zen 3 has wide V256 throughput and short
+   `vpackuswb` latency, so doubling lane density actually doubles work
+   per cycle. On Ice Lake-SP, the V128 path wins at every size ≥ 1 KiB
+   because Ice Lake-SP throttles its zmm/ymm clock and the V128 chain
+   stays at boost.
+2. **AVX-512 explicit intrinsics did not pay off on Ice Lake-SP for this
+   workload.** Both `TwoPointerSimdAvx512` and the experimental
+   `TwoPointerSimdAvx512x2` (kept as a documented negative result, see
+   its source) are slower than the V128 baseline. The bottleneck is
+   memory bandwidth past L1, not vector chain latency, and the
+   AVX-512 frequency penalty wipes out the wider lanes.
+3. **Naive identical across both** (776 vs 763 ns @ 64) confirms the
+   scalar/clock baseline is essentially the same — the deltas above
+   are all SIMD-execution differences, not "Azure is faster".
+
+Conclusion: ship `TwoPointerSimdChecker` (V128) as the portable default,
+keep `TwoPointerSimdByteChecker` for Zen 3 / wide-V256 hosts, and treat
+the AVX-512 paths as documented experiments rather than production
+defaults.
+
+See the published [bench trend](https://pedrosakuma.github.io/palindrome/dev/bench/) for
+the per-commit Azure series.
 
 ## Key techniques along the way
 
