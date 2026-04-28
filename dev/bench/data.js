@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777337636223,
+  "lastUpdate": 1777338778225,
   "repoUrl": "https://github.com/pedrosakuma/palindrome",
   "entries": {
     "Benchmark": [
@@ -1056,6 +1056,558 @@ window.BENCHMARK_DATA = {
             "value": 293786.2836538461,
             "unit": "ns",
             "range": "± 138.0088605752167"
+          }
+        ]
+      }
+    ],
+    "Palindrome (Azure Dsv5 Ice Lake)": [
+      {
+        "commit": {
+          "author": {
+            "name": "Pedro Sakuma Travi",
+            "username": "pedrosakuma",
+            "email": "pedrosakuma@users.noreply.github.com"
+          },
+          "committer": {
+            "name": "Pedro Sakuma Travi",
+            "username": "pedrosakuma",
+            "email": "pedrosakuma@users.noreply.github.com"
+          },
+          "id": "d279ad92261eddef2441c8cd922c0f72995062c2",
+          "message": "feat: AVX-512 double-pumped checker (128 chars/iter)",
+          "timestamp": "2026-04-28T00:34:27Z",
+          "url": "https://github.com/pedrosakuma/palindrome/commit/d279ad92261eddef2441c8cd922c0f72995062c2"
+        },
+        "date": 1777338777938,
+        "tool": "benchmarkdotnet",
+        "benches": [
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Naive(Length: 64)",
+            "value": 750.3431905110677,
+            "unit": "ns",
+            "range": "± 4.796382764495345"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointer(Length: 64)",
+            "value": 63.3001358906428,
+            "unit": "ns",
+            "range": "± 2.8584875294671117"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.NormalizedTwoPointer(Length: 64)",
+            "value": 99.30260475476582,
+            "unit": "ns",
+            "range": "± 0.11424767414094665"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.VectorT(Length: 64)",
+            "value": 92.53375299771626,
+            "unit": "ns",
+            "range": "± 1.88411612899729"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector128(Length: 64)",
+            "value": 91.08608043193817,
+            "unit": "ns",
+            "range": "± 1.047776468265365"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector256(Length: 64)",
+            "value": 88.5574670235316,
+            "unit": "ns",
+            "range": "± 1.8917324965949034"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector512(Length: 64)",
+            "value": 88.85604580243428,
+            "unit": "ns",
+            "range": "± 1.243292013499008"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimd(Length: 64)",
+            "value": 11.868531182408333,
+            "unit": "ns",
+            "range": "± 0.05808244485858999"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdByte(Length: 64)",
+            "value": 5.386434182524681,
+            "unit": "ns",
+            "range": "± 0.04974960940475256"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512(Length: 64)",
+            "value": 53.26828461885452,
+            "unit": "ns",
+            "range": "± 0.45441237429015097"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512x2(Length: 64)",
+            "value": 66.79350674152374,
+            "unit": "ns",
+            "range": "± 3.8546304901448623"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Naive(Length: 64)",
+            "value": 763.5669623057048,
+            "unit": "ns",
+            "range": "± 3.4170171741076603"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointer(Length: 64)",
+            "value": 52.904467821121216,
+            "unit": "ns",
+            "range": "± 0.39997515597285666"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.NormalizedTwoPointer(Length: 64)",
+            "value": 106.75783121585846,
+            "unit": "ns",
+            "range": "± 1.873274163653158"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.VectorT(Length: 64)",
+            "value": 93.5008900086085,
+            "unit": "ns",
+            "range": "± 1.5158063657831933"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector128(Length: 64)",
+            "value": 94.22157264550528,
+            "unit": "ns",
+            "range": "± 1.6559646311375393"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector256(Length: 64)",
+            "value": 92.16804489294688,
+            "unit": "ns",
+            "range": "± 1.1067907064232023"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector512(Length: 64)",
+            "value": 90.90230627854665,
+            "unit": "ns",
+            "range": "± 1.1138203237462727"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimd(Length: 64)",
+            "value": 11.538924908638,
+            "unit": "ns",
+            "range": "± 0.04596401412816419"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdByte(Length: 64)",
+            "value": 5.6862152751003,
+            "unit": "ns",
+            "range": "± 0.04111088945858968"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512(Length: 64)",
+            "value": 63.096243500709534,
+            "unit": "ns",
+            "range": "± 2.2030310072600923"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512x2(Length: 64)",
+            "value": 67.07396891483894,
+            "unit": "ns",
+            "range": "± 1.8935630449308394"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Naive(Length: 1024)",
+            "value": 6959.481168111165,
+            "unit": "ns",
+            "range": "± 168.79323323233262"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointer(Length: 1024)",
+            "value": 997.8853804270426,
+            "unit": "ns",
+            "range": "± 30.74489441317785"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.NormalizedTwoPointer(Length: 1024)",
+            "value": 1370.3112030029297,
+            "unit": "ns",
+            "range": "± 12.859796098509898"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.VectorT(Length: 1024)",
+            "value": 1165.0457782745361,
+            "unit": "ns",
+            "range": "± 45.49217776986462"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector128(Length: 1024)",
+            "value": 1180.9441165924072,
+            "unit": "ns",
+            "range": "± 33.995205304363836"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector256(Length: 1024)",
+            "value": 1190.3284759521484,
+            "unit": "ns",
+            "range": "± 24.55635085221133"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector512(Length: 1024)",
+            "value": 1210.004976908366,
+            "unit": "ns",
+            "range": "± 64.17729050357296"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimd(Length: 1024)",
+            "value": 858.45796362559,
+            "unit": "ns",
+            "range": "± 1.705278975240237"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdByte(Length: 1024)",
+            "value": 972.5598398844401,
+            "unit": "ns",
+            "range": "± 4.314912967148219"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512(Length: 1024)",
+            "value": 974.374568939209,
+            "unit": "ns",
+            "range": "± 0.8609153097205725"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512x2(Length: 1024)",
+            "value": 1014.9958063761393,
+            "unit": "ns",
+            "range": "± 7.8155752277751125"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Naive(Length: 1024)",
+            "value": 6674.625612531389,
+            "unit": "ns",
+            "range": "± 33.242220959278335"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointer(Length: 1024)",
+            "value": 930.7108046213785,
+            "unit": "ns",
+            "range": "± 10.15107396781296"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.NormalizedTwoPointer(Length: 1024)",
+            "value": 1355.7971002679121,
+            "unit": "ns",
+            "range": "± 28.552211291621628"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.VectorT(Length: 1024)",
+            "value": 1135.2573640099888,
+            "unit": "ns",
+            "range": "± 32.81188312132141"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector128(Length: 1024)",
+            "value": 1153.6182869997892,
+            "unit": "ns",
+            "range": "± 28.178941023055497"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector256(Length: 1024)",
+            "value": 1134.7765947977703,
+            "unit": "ns",
+            "range": "± 28.74686941018099"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector512(Length: 1024)",
+            "value": 1110.7265126546224,
+            "unit": "ns",
+            "range": "± 32.95381358306331"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimd(Length: 1024)",
+            "value": 861.2247993605478,
+            "unit": "ns",
+            "range": "± 1.3561473616533968"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdByte(Length: 1024)",
+            "value": 973.1137578146798,
+            "unit": "ns",
+            "range": "± 1.7574821891858279"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512(Length: 1024)",
+            "value": 1002.07930615743,
+            "unit": "ns",
+            "range": "± 2.812518808811729"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512x2(Length: 1024)",
+            "value": 1016.1033055623373,
+            "unit": "ns",
+            "range": "± 5.633222498790607"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Naive(Length: 16384)",
+            "value": 126618.87292480469,
+            "unit": "ns",
+            "range": "± 5187.474006704051"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointer(Length: 16384)",
+            "value": 37915.338928222656,
+            "unit": "ns",
+            "range": "± 397.99980166417066"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.NormalizedTwoPointer(Length: 16384)",
+            "value": 42162.70166015625,
+            "unit": "ns",
+            "range": "± 3740.325694104711"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.VectorT(Length: 16384)",
+            "value": 38355.77734375,
+            "unit": "ns",
+            "range": "± 273.391659146977"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector128(Length: 16384)",
+            "value": 39410.35341389974,
+            "unit": "ns",
+            "range": "± 850.3358548615167"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector256(Length: 16384)",
+            "value": 38007.829264322914,
+            "unit": "ns",
+            "range": "± 956.7784589123798"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector512(Length: 16384)",
+            "value": 36797.62458292643,
+            "unit": "ns",
+            "range": "± 152.29531350853014"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimd(Length: 16384)",
+            "value": 12892.821461995443,
+            "unit": "ns",
+            "range": "± 98.77530579100592"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdByte(Length: 16384)",
+            "value": 14190.349505106607,
+            "unit": "ns",
+            "range": "± 86.92161978736837"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512(Length: 16384)",
+            "value": 14715.41781616211,
+            "unit": "ns",
+            "range": "± 19.2923383568204"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512x2(Length: 16384)",
+            "value": 15996.127090454102,
+            "unit": "ns",
+            "range": "± 61.478841685624985"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Naive(Length: 16384)",
+            "value": 123396.95933314732,
+            "unit": "ns",
+            "range": "± 560.9885289997095"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointer(Length: 16384)",
+            "value": 37027.15200195312,
+            "unit": "ns",
+            "range": "± 247.15484553325024"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.NormalizedTwoPointer(Length: 16384)",
+            "value": 40491.0300394694,
+            "unit": "ns",
+            "range": "± 486.48614641826066"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.VectorT(Length: 16384)",
+            "value": 36504.939408365884,
+            "unit": "ns",
+            "range": "± 403.0743709367721"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector128(Length: 16384)",
+            "value": 39072.62086406507,
+            "unit": "ns",
+            "range": "± 849.4101211121869"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector256(Length: 16384)",
+            "value": 39309.016829427084,
+            "unit": "ns",
+            "range": "± 725.9701411300967"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector512(Length: 16384)",
+            "value": 37099.808340890064,
+            "unit": "ns",
+            "range": "± 397.1400912971947"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimd(Length: 16384)",
+            "value": 14078.427241118057,
+            "unit": "ns",
+            "range": "± 539.9541003455091"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdByte(Length: 16384)",
+            "value": 15070.433414713541,
+            "unit": "ns",
+            "range": "± 144.6643837243744"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512(Length: 16384)",
+            "value": 15792.421471228967,
+            "unit": "ns",
+            "range": "± 175.57947425471315"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512x2(Length: 16384)",
+            "value": 17401.015211995444,
+            "unit": "ns",
+            "range": "± 287.3544677260421"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Naive(Length: 262144)",
+            "value": 2488219.2897135415,
+            "unit": "ns",
+            "range": "± 10970.152441722954"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointer(Length: 262144)",
+            "value": 957136.2457682291,
+            "unit": "ns",
+            "range": "± 17473.398853644012"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.NormalizedTwoPointer(Length: 262144)",
+            "value": 1125782.2177734375,
+            "unit": "ns",
+            "range": "± 53719.22289466209"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.VectorT(Length: 262144)",
+            "value": 1025244.0992838541,
+            "unit": "ns",
+            "range": "± 51860.69115699053"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector128(Length: 262144)",
+            "value": 980459.498046875,
+            "unit": "ns",
+            "range": "± 12778.536803286917"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector256(Length: 262144)",
+            "value": 983229.1168619791,
+            "unit": "ns",
+            "range": "± 13728.568261352284"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector512(Length: 262144)",
+            "value": 1031021.158203125,
+            "unit": "ns",
+            "range": "± 73635.22241591317"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimd(Length: 262144)",
+            "value": 238683.4816080729,
+            "unit": "ns",
+            "range": "± 1403.4194369298764"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdByte(Length: 262144)",
+            "value": 239941.48388671875,
+            "unit": "ns",
+            "range": "± 1918.0778672975694"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512(Length: 262144)",
+            "value": 247229.89111328125,
+            "unit": "ns",
+            "range": "± 1433.8333303438217"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512x2(Length: 262144)",
+            "value": 270030.8948567708,
+            "unit": "ns",
+            "range": "± 2541.3480016156204"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Naive(Length: 262144)",
+            "value": 2442298.001953125,
+            "unit": "ns",
+            "range": "± 33621.098712480234"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointer(Length: 262144)",
+            "value": 914276.6351036659,
+            "unit": "ns",
+            "range": "± 9559.914329175535"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.NormalizedTwoPointer(Length: 262144)",
+            "value": 1067522.2328125,
+            "unit": "ns",
+            "range": "± 16207.051007046914"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.VectorT(Length: 262144)",
+            "value": 1008519.8683035715,
+            "unit": "ns",
+            "range": "± 14540.349723605508"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector128(Length: 262144)",
+            "value": 1011821.7983072917,
+            "unit": "ns",
+            "range": "± 10053.163681673172"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector256(Length: 262144)",
+            "value": 1004095.3533203125,
+            "unit": "ns",
+            "range": "± 13602.03344258168"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.Vector512(Length: 262144)",
+            "value": 1013459.3631510417,
+            "unit": "ns",
+            "range": "± 12587.027378568588"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimd(Length: 262144)",
+            "value": 235410.1668701172,
+            "unit": "ns",
+            "range": "± 3669.31989061184"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdByte(Length: 262144)",
+            "value": 243455.642124721,
+            "unit": "ns",
+            "range": "± 1103.3704890796475"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512(Length: 262144)",
+            "value": 255860.41998697916,
+            "unit": "ns",
+            "range": "± 2949.637781495333"
+          },
+          {
+            "name": "Palindrome.Benchmarks.PalindromeBenchmarks.TwoPointerSimdAvx512x2(Length: 262144)",
+            "value": 276611.97430889425,
+            "unit": "ns",
+            "range": "± 1356.0216337604513"
           }
         ]
       }
