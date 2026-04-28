@@ -23,5 +23,6 @@ public static class PalindromeCheckers
         new TwoPointerSimdChecker(),
         new TwoPointerSimdByteChecker(),
         new TwoPointerSimdAvx512Checker(),
+        new TwoPointerSimdAvx512x2Checker(),
     };
 }

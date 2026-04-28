@@ -43,6 +43,7 @@ public class PalindromeBenchmarks
     private readonly TwoPointerSimdChecker _twoPointerSimd = new();
     private readonly TwoPointerSimdByteChecker _twoPointerSimdByte = new();
     private readonly TwoPointerSimdAvx512Checker _twoPointerSimdAvx512 = new();
+    private readonly TwoPointerSimdAvx512x2Checker _twoPointerSimdAvx512x2 = new();
 
     [GlobalSetup]
     public void Setup() => _palindrome = PalindromeData.Build(Length, seed: 42);
@@ -76,4 +77,7 @@ public class PalindromeBenchmarks
 
     [Benchmark]
     public bool TwoPointerSimdAvx512() => _twoPointerSimdAvx512.IsPalindrome(_palindrome);
+
+    [Benchmark]
+    public bool TwoPointerSimdAvx512x2() => _twoPointerSimdAvx512x2.IsPalindrome(_palindrome);
 }
