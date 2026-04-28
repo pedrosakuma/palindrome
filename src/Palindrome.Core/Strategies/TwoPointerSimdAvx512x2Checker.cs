@@ -11,12 +11,39 @@ namespace Palindrome.Core.Strategies;
 /// per iteration (two 512-bit byte vectors live concurrently per side).
 ///
 /// <para>
-/// The single-pumped <see cref="TwoPointerSimdAvx512Checker"/> only keeps one
-/// 64-byte vector in flight per side, so on long inputs it is bound by the
-/// 4-cycle round-trip of the load → narrow → reverse → compare chain. This
-/// version interleaves two independent chains per side to expose more
-/// memory-level parallelism and better hide L2 latency on inputs that spill
-/// out of L1 (≥ 32 KiB / side).
+/// The hypothesis was that the single-pumped <see cref="TwoPointerSimdAvx512Checker"/>
+/// was bound by the load → narrow → reverse → compare chain on long inputs,
+/// so interleaving two independent chains per side should expose more MLP
+/// and better hide L2 latency on inputs that spill out of L1 (≥ 32 KiB / side).
+/// </para>
+///
+/// <para>
+/// <b>Result: hypothesis was wrong.</b> Measured on Intel Xeon Platinum 8370C
+/// (Ice Lake-SP, AVX-512 BW+VBMI), the double-pumped variant is consistently
+/// slower than single-pumped at every input size — and both AVX-512 variants
+/// lose to the V128 <see cref="TwoPointerSimdChecker"/> on this hardware:
+/// </para>
+///
+/// <code>
+/// Length  | V128 (no narrow) | AVX-512 ×1 | AVX-512 ×2
+///     64  |       11.5 ns    |   63.1 ns  |   67.1 ns
+///   1024  |       861  ns    | 1002   ns  | 1016   ns
+///  16384  |      14.1  µs    |   15.8 µs  |   17.4 µs
+/// 262144  |      235   µs    |  256   µs  |  277   µs
+/// </code>
+///
+/// <para>
+/// Why double-pumping lost: (1) AVX-512 frequency throttling on Ice Lake-SP
+/// — denser zmm ops per iteration deepen the down-clock; (2) L2 bandwidth
+/// is the real bottleneck at large sizes, not chain latency, so adding more
+/// loads in flight does nothing; (3) <c>vpermb</c> has 3-cycle latency but
+/// throughput is one per cycle, so the single-pumped chain already fills
+/// the port — doubling it just queues up.
+/// </para>
+///
+/// <para>
+/// Kept in the repo as a documented negative result: a faster ISA / wider
+/// vectors / more MLP is not automatically faster. Always measure.
 /// </para>
 ///
 /// <para>
